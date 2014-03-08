@@ -1,5 +1,7 @@
 # Author: Jishnu Mohan <jishnu7@gmail.com>
 # 04-03-2014
+location="/home/jishnu/git/IndicKeyboard"
+
 if [ $# -lt 1 ]
 then
     echo "Usage : $0 language type"
@@ -19,9 +21,7 @@ case "$2" in
         ;;
 esac
 
-
-root=`git rev-parse --show-toplevel`
-cd $root/java/res/xml/
+cd $location/java/res/xml/
 for i in "${files[@]}"
 do
     echo "copying... ${i/kannada/$1}"
