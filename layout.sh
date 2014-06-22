@@ -1,5 +1,7 @@
+#!/bin/bash
 # Author: Jishnu Mohan <jishnu7@gmail.com>
 # 04-03-2014
+
 location="/home/jishnu/git/IndicKeyboard"
 src="kashmiri"
 
