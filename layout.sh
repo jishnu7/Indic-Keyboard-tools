@@ -3,7 +3,7 @@
 # 04-03-2014
 
 location="/home/jishnu/git/IndicKeyboard"
-src="kashmiri"
+src="kannada"
 
 if [ $# -lt 1 ]
 then
@@ -18,9 +18,9 @@ case "$2" in
             'rowkeys_'$src'_inscript3.xml' 'rowkeys_'$src'_inscript4.xml')
         ;;
     *)
-        files=('kbd_$src.xml' 'keyboard_layout_set_$src.xml'
-            'rows_$src.xml' 'rowkeys_$src1.xml'
-            'rowkeys_$src2.xml' 'rowkeys_$src3.xml')
+        files=('kbd_'$src'.xml' 'keyboard_layout_set_'$src'.xml'
+            'rows_'$src'.xml' 'rowkeys_'$src1'.xml'
+            'rowkeys_'$src2'.xml' 'rowkeys_'$src3'.xml')
         ;;
 esac
 
