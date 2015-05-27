@@ -87,8 +87,8 @@ jQuery = {
             if(index !== -1) {
               out[sort.indexOf(pos)] = '\t\t\t<!--' + pos + ' ' + char + ' ' + name + '-->\n' +
                 '\t\t\t<Key\n' +
-                '\t\t\t\tlatin:keyLabel="' + toHex(char) +'"\n' +
-                '\t\t\t\tlatin:keyLabelFlags="fontNormal|followKeyLargeLabelRatio" />\n';
+                '\t\t\t\tlatin:keySpec="' + toHex(char) +'"\n' +
+                '\t\t\t\tlatin:keyLabelFlags="fontNormal|followKeyLetterRatio" />\n';
             } else {
               extra.push(pos + " " + toHex(char) + " " + char + name + "\n");
             }
