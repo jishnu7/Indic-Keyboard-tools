@@ -10,6 +10,7 @@ import java.nio.file.Path
 class KeyboardLayoutParser {
     private val factory: XmlPullParserFactory = XmlPullParserFactory.newInstance()
     private lateinit var parentPath: Path
+    private val debug = false
 
     @Throws(XmlPullParserException::class, IOException::class)
     fun readXML(xmlPath: Path) {
@@ -22,20 +23,27 @@ class KeyboardLayoutParser {
         var eventType = xpp.eventType
         while (eventType != XmlPullParser.END_DOCUMENT) {
             when (eventType) {
-                XmlPullParser.START_DOCUMENT -> println("Start document")
+                XmlPullParser.START_DOCUMENT -> {
+                    // document starts
+                }
                 XmlPullParser.START_TAG -> processTag(xpp)
-                XmlPullParser.END_TAG -> println("End tag ${xpp.name}")
-                XmlPullParser.TEXT -> println("Text ${xpp.text}")
+                XmlPullParser.END_TAG -> {
+                    // xpp.name tag ends
+                }
+                XmlPullParser.TEXT -> {
+                    // xpp.text shows the text
+                }
             }
             eventType = xpp.next()
         }
     }
     private fun processTag(xpp: XmlPullParser) {
-        println("Start tag ${xpp.name}")
         var fileLink = ""
         if (xpp.attributeCount > 0) {
             for (x in 0 until xpp.attributeCount) {
-                println("${xpp.getAttributeName(x)}: ${xpp.getAttributeValue(x)}")
+                if (debug) {
+                    println("${xpp.getAttributeName(x)}: ${xpp.getAttributeValue(x)}")
+                }
                 if (xpp.getAttributeName(x) == "latin:keyboardLayout") {
                     fileLink = xpp.getAttributeValue(x)
                     assert(fileLink == xpp.getAttributeValue("", "latin:keyboardLayout"))
@@ -45,6 +53,14 @@ class KeyboardLayoutParser {
         if (xpp.name == "include") {
             val includename = "${fileLink.split("/")[1]}.xml"
             readXML(getSiblingByName(includename, parentPath))
+        }
+        if (xpp.name == "Key") {
+            if (!debug) {
+                print("${xpp.getAttributeValue("", "latin:keySpec")} -")
+            }
+        }
+        if (xpp.name == "Row") {
+            println()
         }
     }
 }
