@@ -10,3 +10,12 @@ fun getFromPath(path: Path): String {
 fun getSiblingByName(name: String, child: Path): Path {
     return Path.of(child.parent.toString(), name)
 }
+
+fun getFileLinkFrom(attribute: String?): String? {
+    val includeName = attribute?.split("/")?.getOrNull(1)
+    return if (includeName != null && includeName.isNotEmpty()) {
+        "$includeName.xml"
+    } else {
+        null
+    }
+}
