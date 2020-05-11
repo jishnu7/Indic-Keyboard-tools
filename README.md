@@ -5,3 +5,4 @@ Helper tools for [Indic Keyboard](https://github.com/androidtweak/Indic-Keyboard
 
 * IME parser - Parse jquery.ime rule file to xml
 * Layout.sh - Create new layout file for a language
+* docs - Generate documentation files
