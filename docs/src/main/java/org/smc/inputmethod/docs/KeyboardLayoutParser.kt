@@ -2,9 +2,7 @@ package org.smc.inputmethod.docs
 
 import mu.KotlinLogging
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
-import java.io.IOException
 import java.io.StringReader
 import java.nio.file.Path
 
@@ -13,10 +11,12 @@ private val logger = KotlinLogging.logger {}
 class KeyboardLayoutParser {
     private val factory: XmlPullParserFactory = XmlPullParserFactory.newInstance()
     private lateinit var parentPath: Path
-    private val debug = false
 
-    @Throws(XmlPullParserException::class, IOException::class)
-    fun readXML(xmlPath: Path): Sequence<KeyboardElement> = sequence {
+    fun readXML(xmlPath: String): Sequence<KeyboardElement> {
+        return readXML(Path.of(xmlPath))
+    }
+
+    private fun readXML(xmlPath: Path): Sequence<KeyboardElement> = sequence {
         saveAsParentIfNecessary(xmlPath)
         val xpp = prepareXpp(xmlPath)
         yieldAll(loopRecursivelyThrough(xpp))
@@ -58,7 +58,7 @@ class KeyboardLayoutParser {
         when (xpp.name) {
             "include" -> yieldAll(include(xpp))
             "Key" -> yield(newKey(xpp))
-            "Row" -> yield(newRow(xpp))
+            "Row" -> yield(newRow())
         }
     }
 
@@ -81,7 +81,7 @@ class KeyboardLayoutParser {
         return Key(keySpec, keyStyle, moreKeys)
     }
 
-    private fun newRow(xpp: XPPWrapper): Row {
+    private fun newRow(): Row {
         logger.debug { "New Row" }
         return Row()
     }

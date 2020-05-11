@@ -1,11 +1,11 @@
 package org.smc.inputmethod.docs
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import mu.KotlinLogging
 
-private val gson = Gson()
-fun printAsJSON(element: Any) {
-    println(gson.toJson(element))
+private val gson = GsonBuilder().setPrettyPrinting().create()
+fun convertToJSON(element: Any): String {
+    return gson.toJson(element)
 }
 
 private val logger = KotlinLogging.logger {}

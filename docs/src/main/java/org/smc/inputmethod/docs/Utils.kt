@@ -1,5 +1,6 @@
 package org.smc.inputmethod.docs
 
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -18,4 +19,8 @@ fun getFileLinkFrom(attribute: String?): String? {
     } else {
         null
     }
+}
+
+fun writeToFile(path: String, data: String) {
+    File(path).writeText(data)
 }
