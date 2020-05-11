@@ -10,4 +10,8 @@ class XPPWrapper(xpp: XmlPullParser) : XmlPullParser by xpp {
         }
         return attributes
     }
+
+    fun getAttributeValue(name: String): String? {
+        return this.getAttributeValue("", name)
+    }
 }

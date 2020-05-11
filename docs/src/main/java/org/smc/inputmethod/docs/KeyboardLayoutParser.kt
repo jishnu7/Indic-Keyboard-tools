@@ -73,11 +73,12 @@ class KeyboardLayoutParser {
     }
 
     private fun newKey(xpp: XPPWrapper): Key {
-        val rawKeySpec: String? = xpp.getAttributeValue("", "latin:keySpec")
-        val keySpec = rawKeySpec ?: ""
+        val keySpec = xpp.getAttributeValue("latin:keySpec")
+        val keyStyle = xpp.getAttributeValue("latin:keyStyle")
+        val moreKeys = xpp.getAttributeValue("latin:moreKeys")
         logger.debug { "New Key: $keySpec" }
         logger.debug { xpp.getAttributes() }
-        return Key(keySpec)
+        return Key(keySpec, keyStyle, moreKeys)
     }
 
     private fun newRow(xpp: XPPWrapper): Row {
