@@ -10,6 +10,6 @@ internal object Main {
     fun main(args: Array<String>) {
         val xmlFilePath = Path.of(args[0])
         val keyboardLayoutParser = KeyboardLayoutParser()
-        keyboardLayoutParser.readXML(xmlFilePath)
+        keyboardLayoutParser.readXML(xmlFilePath).toList()
     }
 }

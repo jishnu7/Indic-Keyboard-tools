@@ -16,10 +16,10 @@ class KeyboardLayoutParser {
     private val debug = false
 
     @Throws(XmlPullParserException::class, IOException::class)
-    fun readXML(xmlPath: Path) {
+    fun readXML(xmlPath: Path): Sequence<KeyboardElement> = sequence {
         saveAsParentIfNecessary(xmlPath)
         val xpp = prepareXpp(xmlPath)
-        loopRecursivelyThrough(xpp)
+        yieldAll(loopRecursivelyThrough(xpp))
     }
 
     private fun saveAsParentIfNecessary(xmlPath: Path) {
@@ -35,14 +35,14 @@ class KeyboardLayoutParser {
         return xpp
     }
 
-    private fun loopRecursivelyThrough(xpp: XPPWrapper) {
+    private fun loopRecursivelyThrough(xpp: XPPWrapper): Sequence<KeyboardElement> = sequence {
         var eventType = xpp.eventType
         while (eventType != XmlPullParser.END_DOCUMENT) {
             when (eventType) {
                 XmlPullParser.START_DOCUMENT -> {
                     // document starts
                 }
-                XmlPullParser.START_TAG -> processTag(xpp)
+                XmlPullParser.START_TAG -> yieldAll(processTag(xpp))
                 XmlPullParser.END_TAG -> {
                     // xpp.name tag ends
                 }
@@ -54,29 +54,34 @@ class KeyboardLayoutParser {
         }
     }
 
-    private fun processTag(xpp: XPPWrapper) {
+    private fun processTag(xpp: XPPWrapper): Sequence<KeyboardElement> = sequence {
         when (xpp.name) {
-            "include" -> include(xpp)
-            "Key" -> newKey(xpp)
-            "Row" -> newRow(xpp)
+            "include" -> yieldAll(include(xpp))
+            "Key" -> yield(newKey(xpp))
+            "Row" -> yield(newRow(xpp))
         }
     }
 
-    private fun include(xpp: XPPWrapper) {
+    private fun include(xpp: XPPWrapper): Sequence<KeyboardElement> = sequence {
         val fileLink = xpp.getAttributes()["latin:keyboardLayout"]
         val includeName = getFileLinkFrom(fileLink)
-        includeName?.let { readSiblingXML(it) }
+        includeName?.let { yieldAll(readSiblingXML(it)) }
     }
 
-    private fun readSiblingXML(path: String) {
-        readXML(getSiblingByName(path, parentPath))
+    private fun readSiblingXML(path: String): Sequence<KeyboardElement> {
+        return readXML(getSiblingByName(path, parentPath))
     }
 
-    private fun newKey(xpp: XPPWrapper) {
-        logger.debug { "New Key: ${xpp.getAttributeValue("", "latin:keySpec")}" }
+    private fun newKey(xpp: XPPWrapper): Key {
+        val rawKeySpec: String? = xpp.getAttributeValue("", "latin:keySpec")
+        val keySpec = rawKeySpec ?: ""
+        logger.debug { "New Key: $keySpec" }
+        logger.debug { xpp.getAttributes() }
+        return Key(keySpec)
     }
 
-    private fun newRow(xpp: XPPWrapper) {
+    private fun newRow(xpp: XPPWrapper): Row {
         logger.debug { "New Row" }
+        return Row()
     }
 }
